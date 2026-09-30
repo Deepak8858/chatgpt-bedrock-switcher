@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+artifacts/
+.env
+.env.*
+*.env
+auth.json
+.codex/
+.aws/
+generated-fixtures/
+configuration-test-report.json
+windows-ui-test-report.*
