@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-09-30T07:26:32.2585503Z",
+  "platform": "Microsoft Windows 10.0.20348",
+  "isolatedSettings": true,
+  "total": 8,
+  "failed": 0,
+  "results": [
+    {
+      "Name": "Window renders and displays configured OpenAI provider",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Selecting Bedrock enables AWS fields and shows feature limits",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Apply button saves Bedrock provider and omits Fast tier",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "OpenAI selection restores model and paid speed preference",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Invalid input shows an error and leaves provider unchanged",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Refresh reloads saved provider and AWS settings",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Tray menu applies both provider switches",
+      "Passed": true,
+      "Error": null
+    },
+    {
+      "Name": "Tray window can be hidden and shown again",
+      "Passed": true,
+      "Error": null
+    }
+  ]
+}

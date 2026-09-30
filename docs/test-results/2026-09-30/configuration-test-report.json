@@ -1,0 +1,169 @@
+{
+  "timestamp": "2026-09-30T07:26:29.7453714Z",
+  "platform": "Microsoft Windows 10.0.20348",
+  "total": 32,
+  "failed": 0,
+  "skipped": 0,
+  "results": [
+    {
+      "name": "TOML edits preserve comments, Unicode, nested keys and multiline strings",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Full OpenAI \u2192 Bedrock \u2192 OpenAI cycle restores model, AWS settings and login",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Default provider and absent model survive repeated switches",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Changing Bedrock fields preserves the original OpenAI snapshot",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Paid-plan Fast preference is omitted for Bedrock and restored exactly",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Version 1.0 state migrates without losing the saved speed preference",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Invalid TOML, profiles and other providers leave settings unchanged",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Input injection and duplicate AWS entries are rejected",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "UTF-8 BOM is preserved and backups contain exact original bytes",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Token precedence notice handles empty values",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Symbolic links are refused without modifying their target",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Existing Bedrock setup can return to default OpenAI without a snapshot",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Repeated toggles do not grow configuration or environment files",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Backup names remain unique through rapid repeated switches",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Switching OpenAI when already selected does not write backups or state",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Refresh inspection does not write any settings",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "External unrelated edits while in Bedrock survive returning to OpenAI",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Invalid UTF-8 input is rejected without corrupting original bytes",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "UTF-16 config is refused rather than silently changing encoding",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Corrupt saved snapshot cannot inject a custom provider on restore",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Corrupt saved literal cannot inject additional TOML settings",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "CRLF environment, exported values and unrelated credentials survive",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Concurrent utility operation is rejected without changing settings",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Directories occupying file paths are rejected before state is written",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Dangling settings symlink is refused",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Config types and duplicate root keys are rejected before writing",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "All managed environment duplicates are rejected",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "A write failure at every commit step restores existing files exactly",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Failure on a fresh home removes newly committed files",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Invalid saved AWS lines cannot add environment entries",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Malformed state JSON is rejected without changing existing settings",
+      "status": "passed",
+      "error": null
+    },
+    {
+      "name": "Generate 50 real switching fixtures for independent TOML verification",
+      "status": "passed",
+      "error": null
+    }
+  ]
+}

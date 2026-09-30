@@ -2,6 +2,8 @@
 
 [![Windows tests](https://github.com/Deepak8858/chatgpt-bedrock-switcher/actions/workflows/windows-tests.yml/badge.svg)](https://github.com/Deepak8858/chatgpt-bedrock-switcher/actions/workflows/windows-tests.yml)
 
+Native Windows validation passed: **32 configuration checks, 50 independent TOML scenarios, and 8 GUI/tray smoke checks**, with no failures or skips. See the [Windows test results](docs/WINDOWS-TEST-RESULTS.md) for the run, reports, screenshot and tested download.
+
 A small native Windows utility to switch **local ChatGPT Work / Codex** between your existing ChatGPT sign-in and **Amazon Bedrock Runtime**. It changes the shared local provider configuration. It does not send model requests itself, require an OpenAI API key, change your login, or stop your apps.
 
 Version 1.1 preserves and restores the OpenAI `service_tier` preference as well as the model. Bedrock mode omits this setting because Bedrock supports on-demand inference, not the ChatGPT Fast tier. The utility displays the feature differences for the selected mode.
