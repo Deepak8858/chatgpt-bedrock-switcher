@@ -1,0 +1,101 @@
+name: Windows tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build native Windows app and checks
+        run: |
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          dotnet publish Desktop/ProviderSwitch.Desktop.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o artifacts/app -warnaserror
+          if ($LASTEXITCODE -ne 0) { throw 'Desktop build failed' }
+          dotnet publish Checks/ProviderSwitch.Checks.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:DebugType=None -p:DebugSymbols=false -o artifacts/checks -warnaserror
+          if ($LASTEXITCODE -ne 0) { throw 'Check runner build failed' }
+      - name: Run configuration tests on Windows
+        run: |
+          & ./artifacts/checks/ProviderSwitch.Checks.exe --report artifacts/configuration-test-report.json --fixtures artifacts/fixtures
+          if ($LASTEXITCODE -ne 0) { throw 'Windows configuration tests failed' }
+      - name: Verify 50 scenarios with independent TOML parser
+        run: |
+          python Checks/verify-fixtures.py artifacts/fixtures
+          if ($LASTEXITCODE -ne 0) { throw 'Independent TOML verification failed' }
+      - name: Run native Windows GUI and tray tests
+        timeout-minutes: 3
+        run: |
+          $reportPath = Join-Path $PWD 'artifacts/windows-ui-test-report.json'
+          $executable = Join-Path $PWD 'artifacts/app/ProviderSwitch.exe'
+          $testProcess = Start-Process -FilePath $executable -ArgumentList "--ui-smoke-test `"$reportPath`"" -PassThru
+          if (-not $testProcess.WaitForExit(120000)) {
+            Stop-Process -Id $testProcess.Id -Force
+            throw 'Windows GUI tests timed out'
+          }
+          if (Test-Path $reportPath) { Get-Content $reportPath }
+          if ($testProcess.ExitCode -ne 0) { throw 'Windows GUI tests failed' }
+          $report = Get-Content $reportPath -Raw | ConvertFrom-Json
+          if ($report.total -ne 8 -or $report.failed -ne 0) { throw 'Expected eight passing GUI tests' }
+      - name: Package Windows app and test kit
+        run: |
+          Copy-Item README.md,THIRD-PARTY-NOTICES.txt artifacts/app/
+          Copy-Item licenses/*.txt artifacts/app/
+          Copy-Item Checks/Run-Windows-Tests.cmd artifacts/app/
+          Copy-Item artifacts/checks/ProviderSwitch.Checks.exe artifacts/app/
+          Compress-Archive -Path artifacts/app/* -DestinationPath artifacts/ProviderSwitch-windows-tested.zip
+          Get-FileHash artifacts/ProviderSwitch-windows-tested.zip -Algorithm SHA256 | Format-List
+      - name: Write test summary
+        if: always()
+        run: |
+          "## Native Windows test results" >> $env:GITHUB_STEP_SUMMARY
+          "Runner: Windows Server 2022 (windows-2022). Tests use temporary settings and no account credentials." >> $env:GITHUB_STEP_SUMMARY
+          foreach ($file in @('configuration-test-report.json', 'independent-toml-report.json', 'windows-ui-test-report.json')) {
+            $path = Join-Path 'artifacts' $file
+            if (Test-Path $path) {
+              $report = Get-Content $path -Raw | ConvertFrom-Json
+              "- ${file}: total=$($report.total), failed=$($report.failed), skipped=$($report.skipped)" >> $env:GITHUB_STEP_SUMMARY
+            } else {
+              "- ${file}: not produced" >> $env:GITHUB_STEP_SUMMARY
+            }
+          }
+          "Live ChatGPT paid-feature access and AWS inference/billing are not exercised by this workflow." >> $env:GITHUB_STEP_SUMMARY
+      - name: Upload test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-test-evidence
+          path: |
+            artifacts/*.json
+            artifacts/*.png
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Upload tested Windows app
+        uses: actions/upload-artifact@v4
+        with:
+          name: provider-switch-windows-tested
+          path: artifacts/ProviderSwitch-windows-tested.zip
+          retention-days: 30
